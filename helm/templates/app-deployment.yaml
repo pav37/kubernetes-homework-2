@@ -33,6 +33,18 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.app.portNumber }}
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: {{ .Values.app.portNumber }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: {{ .Values.app.portNumber }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
           resources:
             limits:
               cpu: {{ .Values.app.resources.limits.cpu }}
